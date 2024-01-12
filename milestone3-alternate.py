@@ -1,11 +1,10 @@
 import math
 import sys
-import copy
 
 sys.setrecursionlimit(20000)
 #open the input file
-inp= open("C:\\Users\\rammu\\OneDrive\\Desktop\\MSc SS\\6th sem\\kla-hackathon\\Workshop2024\\Milestone3\\Input\\Testcase2.txt",'r')
-out= open("C:\\Users\\rammu\\OneDrive\\Desktop\\MSc SS\\6th sem\\kla-hackathon\\Workshop2024\\Output\\Milestone3\\Milestone3Output2.txt",'w')
+inp= open("C:\\Users\\rammu\\OneDrive\\Desktop\\MSc SS\\6th sem\\kla-hackathon\\Workshop2024\\Milestone3\\Input\\Testcase1.txt",'r')
+out= open("C:\\Users\\rammu\\OneDrive\\Desktop\\MSc SS\\6th sem\\kla-hackathon\\Workshop2024\\Output\\Milestone3\\Milestone3AlternateOutput1.txt",'w')
 
 #read the input content into a dictionary
 lines=inp.readlines()
@@ -94,61 +93,30 @@ def die_num(x_curr,y_curr,x_pos,y_pos,x_pos_ret,y_pos_ret):
 
         out.write("("+str(x_pos)+","+str(y_pos)+"):("+str(x_curr)+","+str(y_curr)+")\n")
 
-        # x_prev=copy.deepcopy(x_dsw)
-        # x_next=copy.deepcopy(x_dsw)
-        # y_prev=copy.deepcopy(y_dsw)
-        # y_next=copy.deepcopy(y_dsw)
-        x_prev=x_next=x_dsw
-        x_prev_change=x_next_change=0
-        
-        if x_pos_ret==1:
-            x_prev+=x_rsw
-            x_prev_change=x_dpr+1-x_pos_ret
-        if x_pos_ret==x_dpr:
-            x_next+=x_rsw
-            x_next_change=-x_pos_ret-1
-
         if [x_pos-1,y_pos] not in visited:
-            die_num(x_curr-x_die-x_prev,y_curr,x_pos-1,y_pos,x_pos_ret-1+x_prev_change,y_pos_ret)
-        
-        y_prev=y_next=y_dsw
-        y_prev_change=y_next_change=0
-        
-        if y_pos_ret==1:
-            y_prev+=y_rsw
-            y_prev_change=y_dpr+1-y_pos_ret
-        if y_pos_ret==y_dpr:
-            y_next+=y_rsw
-            y_next_change=-y_pos_ret-1
-        
-        if [x_pos,y_pos-1] not in visited:
-            die_num(x_curr,y_curr-y_die-y_prev,x_pos,y_pos-1,x_pos_ret,y_pos_ret-1+y_prev_change)
-
-        x_prev=x_next=x_dsw
-        x_prev_change=x_next_change=0
-
-        if x_pos_ret==1:
-            x_prev+=x_rsw
-            x_prev_change=x_dpr+1-x_pos_ret
-        if x_pos_ret==x_dpr:
-            x_next+=x_rsw
-            x_next_change=-x_pos_ret-1
+            if x_pos_ret==1:
+                die_num(x_curr-x_die-x_rsw-x_dsw, y_curr, x_pos-1, y_pos, x_dpr, y_pos_ret)
+            else:
+                die_num(x_curr-x_die-x_dsw,y_curr, x_pos-1, y_pos, x_pos_ret-1, y_pos_ret)
 
         if [x_pos+1,y_pos] not in visited:
-            die_num(x_curr+x_die+x_next,y_curr,x_pos+1,y_pos,x_pos_ret+1+x_next_change,y_pos_ret)
+            if x_pos_ret==x_dpr:
+                die_num(x_curr+x_die+x_rsw+x_dsw, y_curr, x_pos+1, y_pos, 1, y_pos_ret)
+            else:
+                die_num(x_curr+x_die+x_dsw,y_curr, x_pos+1, y_pos, x_pos_ret+1, y_pos_ret)
 
-        y_prev=y_next=y_dsw
-        y_prev_change=y_next_change=0
-        
-        if y_pos_ret==1:
-            y_prev+=y_rsw
-            y_prev_change=y_dpr+1-y_pos_ret
-        if y_pos_ret==y_dpr:
-            y_next+=y_rsw
-            y_next_change=-y_pos_ret-1
-
+        if [x_pos,y_pos-1] not in visited:
+            if x_pos_ret==1:
+                die_num(x_curr, y_curr-y_die-y_dsw-y_rsw, x_pos, y_pos-1, x_pos_ret, y_dpr)
+            else:
+                die_num(x_curr, y_curr-y_die-y_dsw, x_pos, y_pos-1, x_pos_ret, y_pos_ret-1)
+            
         if [x_pos,y_pos+1] not in visited:
-            die_num(x_curr,y_curr+y_die+y_next,x_pos,y_pos+1,x_pos_ret,y_pos_ret+1+y_next_change)
+            if x_pos_ret==y_dpr:
+                die_num(x_curr, y_curr+y_die+y_dsw+y_rsw, x_pos, y_pos+1, x_pos_ret, 1)
+            else:
+                die_num(x_curr, y_curr-y_die-y_dsw, x_pos, y_pos+1, x_pos_ret, y_pos_ret+1)
+            
     else:
         return
 
